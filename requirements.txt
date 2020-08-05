@@ -31,7 +31,7 @@ aiofiles
 speedtest-cli
 timeago
 git+https://github.com/legenhand/mega.py.git
-httplib2==0.15.0
+httplib2==0.18.0
 coffeehouse==2.2.2
 pycurl==7.43.0.5
 tracemoepy==3.1
