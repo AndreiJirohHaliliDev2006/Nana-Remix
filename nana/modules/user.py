@@ -58,16 +58,12 @@ profile_photo = "nana/downloads/pfp.jpg"
 
 @app.on_message(Filters.user(AdminSettings) & Filters.command("link", Command))
 async def link_message(client, message):
-    if message.chat.type == "private" and message.chat.type ==  "bot":
-        await message.delete()
-        return
+    if message.reply_to_message:
+        b = message.reply_to_message.message_id
     else:
-        if message.reply_to_message:
-            b = message.reply_to_message.message_id
-        else:
-            b = message.message_id
-        a = utils.get_channel_id(message.chat.id)
-        await msg(message, text=f'https://t.me/c/{a}/{b}')
+        b = message.message_id
+    a = utils.get_channel_id(message.chat.id)
+    await msg(message, text=f'https://t.me/c/{a}/{b}')
 
 
 @app.on_message(Filters.user(AdminSettings) & Filters.command(["e", "edit"], Command))

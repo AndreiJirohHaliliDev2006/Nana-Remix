@@ -92,18 +92,7 @@ async def gdrive_stuff(client, message):
             "You are not logged in to your google drive account!\nYour assistant bot may help you to login google "
             "drive, check your assistant bot for more information!")
         gdriveclient = os.path.isfile("client_secrets.json")
-        if not gdriveclient:
-            await setbot.send_message(message.from_user.id,
-                                      "Hello, look like you're not logged in to google drive 🙂\nI can help you to "
-                                      "login.\n\nFirst of all, you need to activate your google drive API\n1. [Go "
-                                      "here](https://developers.google.com/drive/api/v3/quickstart/python), "
-                                      "click **Enable the drive API**\n2. Login to your google account (skip this if "
-                                      "you're already logged in)\n3. After logged in, click **Enable the drive API** "
-                                      "again, and click **Download Client Configuration** button, download that.\n4. "
-                                      "After downloaded that file, open that file then copy all of that content, "
-                                      "back to telegram then do .credentials (copy the content of that file)  do "
-                                      "without bracket\n\nAfter that, you can go next guide by type /gdrive")
-        else:
+        if gdriveclient:
             try:
                 gauth.GetAuthUrl()
             except Exception as e:
@@ -118,6 +107,17 @@ async def gdrive_stuff(client, message):
                                       "you're logged in, copy your Token.\n3. `/gdrive (token)` without `(` or `)` to "
                                       "login, and your session will saved to `nana/session/drive`.\n\nDon't share your "
                                       "session to someone, else they will hack your google drive account!")
+        else:
+            await setbot.send_message(message.from_user.id,
+                                      "Hello, look like you're not logged in to google drive 🙂\nI can help you to "
+                                      "login.\n\nFirst of all, you need to activate your google drive API\n1. [Go "
+                                      "here](https://developers.google.com/drive/api/v3/quickstart/python), "
+                                      "click **Enable the drive API**\n2. Login to your google account (skip this if "
+                                      "you're already logged in)\n3. After logged in, click **Enable the drive API** "
+                                      "again, and click **Download Client Configuration** button, download that.\n4. "
+                                      "After downloaded that file, open that file then copy all of that content, "
+                                      "back to telegram then do .credentials (copy the content of that file)  do "
+                                      "without bracket\n\nAfter that, you can go next guide by type /gdrive")
         return
     elif gauth.access_token_expired:
         # Refresh them if expired
@@ -186,10 +186,10 @@ async def gdrive_stuff(client, message):
             await msg(message, text="__Downloading...__")
             c_time = time.time()
             if message.reply_to_message.photo:
-                if not message.reply_to_message.caption: 
-                    nama = f"photo_{message.reply_to_message.photo.date}.png"
-                else:
+                if message.reply_to_message.caption:
                     nama = f'{message.reply_to_message.caption}.png'.replace(' ', '_')
+                else: 
+                    nama = f"photo_{message.reply_to_message.photo.date}.png"
                 await client.download_media(message.reply_to_message.photo, file_name="nana/downloads/" + nama,
                                             progress=lambda d, t: asyncio.get_event_loop().create_task(
                                                 progressdl(d, t, message, c_time, "Downloading...")))
@@ -203,36 +203,36 @@ async def gdrive_stuff(client, message):
                                             progress=lambda d, t: asyncio.get_event_loop().create_task(
                                                 progressdl(d, t, message, c_time, "Downloading...")))
             elif message.reply_to_message.video:
-                if not message.reply_to_message.caption: 
+                if message.reply_to_message.caption:
+                    nama = f'{message.reply_to_message.caption}.mp4'.replace(' ', '_').replace('.mkv', '')
+                else: 
                     nama = "video_{}-{}.mp4".format(message.reply_to_message.video.date,
                                                     message.reply_to_message.video.file_size)
-                else:
-                    nama = f'{message.reply_to_message.caption}.mp4'.replace(' ', '_').replace('.mkv', '')
                 await client.download_media(message.reply_to_message.video, file_name="nana/downloads/" + nama,
                                             progress=lambda d, t: asyncio.get_event_loop().create_task(
                                                 progressdl(d, t, message, c_time, "Downloading...")))
             elif message.reply_to_message.sticker:
-                if not message.reply_to_message.caption:
+                if message.reply_to_message.caption:
+                    nama = f'{message.reply_to_message.caption}.webp'.replace(' ', '_')
+                else:
                     nama = "sticker_{}_{}.webp".format(message.reply_to_message.sticker.date,
                                                     message.reply_to_message.sticker.set_name)
-                else:
-                    nama = f'{message.reply_to_message.caption}.webp'.replace(' ', '_')
                 await client.download_media(message.reply_to_message.sticker, file_name="nana/downloads/" + nama,
                                             progress=lambda d, t: asyncio.get_event_loop().create_task(
                                                 progressdl(d, t, message, c_time, "Downloading...")))
             elif message.reply_to_message.audio:
-                if not message.reply_to_message.caption:
-                    nama = "audio_{}.mp3".format(message.reply_to_message.audio.date)
-                else:
+                if message.reply_to_message.caption:
                     nama = f'{message.reply_to_message.caption}.mp3'.replace(' ', '_')
+                else:
+                    nama = "audio_{}.mp3".format(message.reply_to_message.audio.date)
                 await client.download_media(message.reply_to_message.audio, file_name="nana/downloads/" + nama,
                                             progress=lambda d, t: asyncio.get_event_loop().create_task(
                                                 progressdl(d, t, message, c_time, "Downloading...")))
             elif message.reply_to_message.voice:
-                if not message.reply_to_message.caption:
-                    nama = "audio_{}.ogg".format(message.reply_to_message.voice.date)
-                else:
+                if message.reply_to_message.caption:
                     nama = f'{message.reply_to_message.caption}.ogg'.replace(' ', '_')
+                else:
+                    nama = "audio_{}.ogg".format(message.reply_to_message.voice.date)
                 await client.download_media(message.reply_to_message.voice, file_name="nana/downloads/" + nama,
                                             progress=lambda d, t: asyncio.get_event_loop().create_task(
                                                 progressdl(d, t, message, c_time, "Downloading...")))

@@ -33,11 +33,7 @@ class Custom(dict):
 async def get_inactive(client, message):
     cmd = message.command
     start = time.time()
-    if len(cmd) > 1:
-        limit = int(" ".join(cmd[1:]))
-    else:
-        limit = 0
-
+    limit = int(" ".join(cmd[1:])) if len(cmd) > 1 else 0
     messages = [
         m
         async for member in client.iter_chat_members(

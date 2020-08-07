@@ -177,10 +177,6 @@ async def mute_hammer(client, message):
                             until_date=int(time.time() + 86400),
                         )
                         text = f"**Muted for 24 hours**\n"
-                        text += f"User: [{get_mem.user.first_name}](tg://user?id={get_mem.user.id}) "
-                        text += f"(`{get_mem.user.id}`)\n"
-                        text += f"Chat: `{get_group.title}` (`{chat_id}`)"
-                        await msg(message, text=text)
                     else:
                         await client.restrict_chat_member(
                             chat_id=message.chat.id,
@@ -188,10 +184,10 @@ async def mute_hammer(client, message):
                             permissions=mute_permission,
                         )
                         text = f"**Muted Indefinitely**\n"
-                        text += f"User: [{get_mem.user.first_name}](tg://user?id={get_mem.user.id}) "
-                        text += f"(`{get_mem.user.id}`)\n"
-                        text += f"Chat: `{get_group.title}` (`{chat_id}`)"
-                        await msg(message, text=text)
+                    text += f"User: [{get_mem.user.first_name}](tg://user?id={get_mem.user.id}) "
+                    text += f"(`{get_mem.user.id}`)\n"
+                    text += f"Chat: `{get_group.title}` (`{chat_id}`)"
+                    await msg(message, text=text)
                 except Exception as e:
                     await msg(message, text="`Error!`\n" f"**Log:** `{e}`")
                     return

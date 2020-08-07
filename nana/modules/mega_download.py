@@ -103,7 +103,6 @@ async def mega_downloader(_client, message):
                     display_message = current_message
         except Exception as e:
             print(e)
-            pass
     if downloader.isSuccessful():
         download_time = downloader.get_dl_time(human=True)
         if exists(temp_file_name):

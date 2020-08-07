@@ -126,7 +126,8 @@ START_CHAR = ('\'', '"', SMART_OPEN)
 
 
 def split_quotes(text: str):
-    if any(text.startswith(char) for char in START_CHAR):
+        if not any(text.startswith(char) for char in START_CHAR):
+                return text.split(None, 1)
         counter = 1  # ignore first char -> is some kind of quote
         while counter < len(text):
             if text[counter] == "\\":
@@ -144,8 +145,6 @@ def split_quotes(text: str):
         if not key:
             key = text[0] + text[0]
         return list(filter(None, [key, rest]))
-    else:
-        return text.split(None, 1)
 
 
 def extract_text(message):
@@ -153,16 +152,14 @@ def extract_text(message):
 
 
 def remove_escapes(text: str) -> str:
-    counter = 0
-    res = ""
-    is_escaped = False
-    while counter < len(text):
-        if is_escaped:
-            res += text[counter]
-            is_escaped = False
-        elif text[counter] == "\\":
-            is_escaped = True
-        else:
-            res += text[counter]
-        counter += 1
-    return res
+        res = ""
+        is_escaped = False
+        for item in text:
+                if is_escaped:
+                        res += item
+                        is_escaped = False
+                elif item == "\\":
+                        is_escaped = True
+                else:
+                        res += item
+        return res
