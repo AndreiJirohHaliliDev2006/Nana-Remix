@@ -2,7 +2,7 @@ psycopg2
 kbbi
 pySmartDL==1.3.3
 requests==2.24.0
-git+https://github.com/pytube3/pytube3.git
+git+https://github.com/pokurt/pytube3.git
 git+https://github.com/pokurt/pyrogram@asyncio-dev
 TgCrypto
 pydrive==1.3.1

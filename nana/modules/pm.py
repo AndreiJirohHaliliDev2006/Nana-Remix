@@ -73,12 +73,12 @@ async def pm_button(client, query):
         return
     if re.match(r"engine_pm_block", query.data):
         await app.send_sticker(query.from_user.id, sticker='CAADAgAD1QQAAp7kTAry1JrL3zVXSxYE')
-        await app.send_message(query.from_user.id, "Sorry, No cash.\nAlso you are getting reported to **SpamWatch**, OwO")
+        await app.send_message(query.from_user.id, "Sorry, I don't have cash. Also you are getting reported to **SpamWatch**, OwO")
         await app.block_user(query.from_user.id)
     elif re.match(r"engine_pm_nope", query.data):
         await setbot.edit_inline_text(query.inline_message_id, "👍")
         await app.send_message(query.from_user.id,
-                            "Hello, please wait for a reply from my master, thank you")
+                            "Hello, please wait for a reply from my master, thank you.")
         buttons = InlineKeyboardMarkup([[InlineKeyboardButton("Approve",
                                                             callback_data=f"engine_pm_apr-{query.from_user.id}"),
                                         InlineKeyboardButton("Block",
@@ -92,11 +92,19 @@ async def pm_button(client, query):
     elif re.match("engine_pm_report", query.data):
         await setbot.edit_inline_text(query.inline_message_id, "👍")
         await app.send_message(query.from_user.id,
-                            "Hello, if you want to report any bugs, please vist in @NanaBotSupport")
+                            "Hello, if you want to report any bugs, please join @NanaBotSupport.")
     elif re.match("engine_pm_none", query.data):
         await setbot.edit_inline_text(query.inline_message_id, "👍")
         await app.send_message(query.from_user.id,
-                            "Alright then,\nIf you want anything from me, please contact my again. Thank you")
+                            "Alright then, if you want anything from me, please contact my again. Thank you.")
+    elif re.match("engine_pm_report_spam", query.data):
+        await setbot.edit_inline_text(query.inline_message_id, "👍")
+        await app.send_message(query.from_user.id,
+                            "Alright, please wait for my master's response for next steps. Thanks for submitting your spam report.")
+    elif re.match("engine_pm_appeal_to_fban", query.data):
+        await setbot.edit_inline_text(query.inline_message_id, "")
+        await app.send_message(query.inline_message_id,
+                            "Thanks for asking for a ban appeal. Please take that to @ThePinsTeam_FedSupport so other FedAdmins can take care of your case.\n\nIf you think you're banned on other places such as SpamWatch, please check their available support options first.")
     elif re.match("engine_pm_apr", query.data):
         target = query.data.split("-")[1]
         await query.message.edit_text(f"[Approved for PM]({target})")
@@ -104,8 +112,8 @@ async def pm_button(client, query):
         set_whitelist(int(target), True)
     elif re.match(r"engine_pm_blk", query.data):
         target = query.data.split("-")[1]
-        await query.message.edit_text("That user was blocked ~")
-        await app.send_message(target, "Hello, this is **Nana**, my master has decide to block you.\nSorry for this!")
+        await query.message.edit_text("Sed, that user was blocked.")
+        await app.send_message(target, "Hello, this is **Nana**, my master has decide to block you. Sorry for this!")
         await app.block_user(target)
     else:
         await setbot.edit_inline_text(query.inline_message_id, "🙆‍")

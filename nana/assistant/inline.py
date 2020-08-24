@@ -1,7 +1,6 @@
 import sys
 import traceback
 import random
-from uuid import uuid4
 import requests
 import git
 import os
@@ -9,7 +8,7 @@ from pyrogram import InlineQueryResultArticle, __version__, InlineQueryResultPho
 from pyrogram import errors, InlineKeyboardMarkup, InputTextMessageContent, InlineKeyboardButton
 from platform import python_version
 
-from nana import setbot, Owner, OwnerName, DB_AVAILABLE, app, USERBOT_VERSION
+from nana import setbot, Owner, OwnerName, DB_AVAILABLE, app, USERBOT_VERSION, AdminSettings
 from nana.helpers.msg_types import Types
 from nana.helpers.string import parse_button, build_keyboard
 from nana.modules.pm import welc_txt
@@ -42,11 +41,10 @@ GET_FORMAT = {
 async def inline_query_handler(client, query):
     string = query.query.lower()
     answers = []
-
-    if query.from_user.id != Owner:
+    if query.from_user.id not in AdminSettings:
         await client.answer_inline_query(query.id,
                                          results=answers,
-                                         switch_pm_text="Sorry, this bot only for {}".format(OwnerName),
+                                         switch_pm_text="Sorry, the Assistant bot is only for {}".format(OwnerName),
                                          switch_pm_parameter="createown"
                                          )
         return
@@ -107,7 +105,7 @@ async def inline_query_handler(client, query):
         if not noteval:
             await client.answer_inline_query(query.id,
                                              results=answers,
-                                             switch_pm_text="Note not found!",
+                                             switch_pm_text="404 Note not found!",
                                              switch_pm_parameter="help_inline"
                                              )
             return
@@ -233,11 +231,12 @@ async def inline_query_handler(client, query):
     elif string.split()[0] == "engine_pm":
         button = [[InlineKeyboardButton("Ask for Money", callback_data="engine_pm_block"),
                    InlineKeyboardButton("Contact me", callback_data="engine_pm_nope")],
-                  [InlineKeyboardButton("Report", callback_data="engine_pm_report"),
-                   InlineKeyboardButton("Passing by", callback_data="engine_pm_none")]]
+                  [InlineKeyboardButton("Report userbot bugs", callback_data="engine_pm_report"),
+                   InlineKeyboardButton("Passing by", callback_data="engine_pm_none")],
+                  [InlineKeyboardButton("Report spam", callback_data="engine_pm_report_spam"),
+                   InlineKeyboardButton("Appeal to fban", callback_data="engine_pm_appeal_to_fban")]]
         random.shuffle(button)
         answers.append(InlineQueryResultArticle(
-            id=uuid4(),
             title="Engine pm",
             description="Filter pm",
             input_message_content=InputTextMessageContent(welc_txt, parse_mode="markdown"),
@@ -253,9 +252,8 @@ async def inline_query_handler(client, query):
                     InlineKeyboardButton("Text",
                                         callback_data="speedtest_text")]]
         answers.append(InlineQueryResultArticle(
-            id=uuid4(),
             title="Speed Test",
-            description="test your speed",
+            description="Run a internet speed test, powered by",
             input_message_content=InputTextMessageContent("Select SpeedTest Mode", parse_mode="markdown"),
             reply_markup=InlineKeyboardMarkup(buttons)))
         await client.answer_inline_query(query.id,
@@ -266,12 +264,12 @@ async def inline_query_handler(client, query):
         repo = git.Repo(os.getcwd())
         master = repo.head.reference
         commit_id = master.commit.hexsha
-        commit_link = f"[{commit_id[:7]}](https://github.com/pokurt/Nana-Remix/commit/{commit_id})"
+        commit_link = f"[{commit_id[:7]}](https://github.com/MadeByThePinsHUb/Nana-Remix/commit/{commit_id})"
         try:
             me = await app.get_me()
         except ConnectionError:
             me = None
-        text = f"**[Nana-Remix](https://github.com/pokurt/Nana-Remix) Running on {commit_link}:**\n"
+        text = f"**[Nana-Remix-AJHalili2006](https://github.com/MadeByThePinsHub/Nana-Remix) Running on {commit_link}:**\n"
         if not me:
             text += f" - **Bot**: `stopped (v{USERBOT_VERSION})`\n"
         else:
@@ -281,9 +279,8 @@ async def inline_query_handler(client, query):
         text += f" - **Database**: `{DB_AVAILABLE}`\n"
         buttons = [[InlineKeyboardButton("stats", callback_data="alive_message")]]
         answers.append(InlineQueryResultArticle(
-            id=uuid4(),
             title="Alive",
-            description="Nana Userbot",
+            description="Get basic information about Nana userbot.",
             input_message_content=InputTextMessageContent(text, parse_mode="markdown", disable_web_page_preview=True),
             reply_markup=InlineKeyboardMarkup(buttons)))
         await client.answer_inline_query(query.id,
@@ -322,12 +319,12 @@ async def inline_query_handler(client, query):
                     [InlineKeyboardButton("More Info", url=info)]
                     ]
             if image:
-                msg += f" [‎]({image})"
-                answers.append(InlineQueryResultArticle(
-                    id=uuid4(),
+                answers.append(InlineQueryResultPhoto(
+                    caption=msg,
+                    photo_url=image,
+                    parse_mode="markdown",
                     title=f"{json['title']['romaji']}",
-                    description=f"{json['averageScore']}",
-                    input_message_content=InputTextMessageContent(msg, parse_mode="markdown", disable_web_page_preview=False),
+                    description=f"{json['format']}",
                     reply_markup=InlineKeyboardMarkup(buttons)))
                 await client.answer_inline_query(query.id,
                                                 results=answers,
@@ -335,7 +332,6 @@ async def inline_query_handler(client, query):
                                                 )
             else:
                 answers.append(InlineQueryResultArticle(
-                    id=uuid4(),
                     title=f"{json['title']['romaji']}",
                     description=f"{json['averageScore']}",
                     input_message_content=InputTextMessageContent(msg, parse_mode="markdown", disable_web_page_preview=True),

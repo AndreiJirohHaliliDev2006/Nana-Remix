@@ -1,22 +1,45 @@
 docker_builder:
   name: Build and push Docker image to Docker Hub
   timeout_in: 95m
+  # If you forked the repo and want to use Cirrus CI to build and push image to Docker Hub,
+  # change "MadeByThePinsHub" below into your personal account username or your GitHub org username.
   only_if: $CIRRUS_BRANCH == "master" && $CIRRUS_REPO_OWNER == "MadeByThePinsHub"
-  skip: "!changesInclude('.cirrus.yml', '**.{py}', 'Dockerfile')"
+  skip: "!changesInclude('.cirrus.yml', '**.{py}', 'Dockerfile', '**/*nana*/**')"
   env:
     # For forks, change this var into your own Docker Hub username, must be an service account.
     DOCKERHUB_USERNAME: thepinsteam
-    # Only repos that are owned by the Pins team can use the access key.
-    # Please generate a new encrypted var on https://cirrus-ci.com/settings/github/your-username-here and
+    # Only repos that are owned by the Pins team can use the Docker Hub access key.
+    # Please generate a new encrypted var on https://cirrus-ci.com/settings/github/your-orgusername-here and
     # replace the value below with yours.
     DOCKERHUB_ACCESS_KEY: ENCRYPTED[!e15bc943a38e23531fd9f7729d3a0f51bf38ea1e15c081b93b5685a6ffe576375154eee1e716c595ac2f076e38c40433!]
-  build_script: docker build --tag thepinsteam/nana-remix .
+    # For forks, change this var below into your desired Docker image name.
+    # If you want to push your image outside Docker Hub, see the docs for your registry.
+    DOCKERHUB_IMAGE_TAG: thepinsteam/nana-remix
+  build_script: docker build --tag $DOCKERHUB_IMAGE_TAG .
   login_script: docker login --username $DOCKERHUB_USERNAME --password $DOCKERHUB_ACCESS_KEY
-  push_script: docker push thepinsteam/nana-remix
+  push_script: docker push $DOCKERHUB_IMAGE_TAG
 
 docker_builder:
   name: Only build Docker image
   timeout_in: 95m
   only_if: $CIRRUS_BRANCH != "master"
-  skip: "!changesInclude('.cirrus.yml', '**.{py}', 'Dockerfile')"
-  build_script: docker build --tag thepinsteam/nana-remix:TEST-BUILDS .
+  skip: "!changesInclude('.cirrus.yml', '**.{py}', 'Dockerfile', '**/*nana*/**')"
+  build_script: docker build .
+
+# Heroku deployment using the 'git push' way.
+# Comment lines 30-45 if you don't use Heroku.
+publish_task:
+  name: Push latest commits to Heroku.
+  only_if: $BRANCH == 'master'
+  container:
+    image: alpine/git:latest
+  env:
+    # Only people with write access to this repo can decrypt the values of these encrypted values.
+    # Please generate a new encrypted var on your Cirrus CI settings for your repo and
+    # replace the value below with yours.
+    HEROKU_API_KEY: ENCRYPTED[2b680a6cd5ba5be5ec156f0159039d9a58afae2307ed325bab4e8edf13ced624224c505b59d4af1f38ef25b9d229078d]
+    HEROKU_APP_NAME: ENCRYPTED[0914901577755ca103a67e8d615bc0e9707319347f8274f4425751b51452bda90930d33210970359ade8a74cff984cbe]
+  script: |
+    git remote add heroku https://api:${HEROKU_API_KEY}@git.heroku.com/${HEROKU_APP_NAME}.git && git fetch --all
+    git branch -u heroku/master && git status
+    git push

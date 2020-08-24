@@ -7,4 +7,13 @@ rules:
       - ThePinsTeam
     reviewers:
       - AndreiJirohHaliliDev2006
+
+  # Config for our PR.
+  - base: contributor-branch/pokurt-pr-1
+    upstream: master
+    mergeMethod: merge
+    assignees:
+      - ThePinsTeam
+    reviewers:
+      - AndreiJirohHaliliDev2006
 label: ":arrow_heading_down: pull"
