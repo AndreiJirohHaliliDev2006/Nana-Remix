@@ -22,7 +22,7 @@ pafy==0.5.5
 youtube_dl==2020.7.28
 googletrans==3.0.0
 currencyconverter
-heroku3==4.2.1
+heroku3==4.2.3
 uptime
 py-cpuinfo
 svglib
