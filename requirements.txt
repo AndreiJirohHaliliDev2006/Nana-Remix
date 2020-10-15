@@ -36,7 +36,7 @@ coffeehouse==2.2.2
 pycurl==7.43.0.5
 tracemoepy==3.1
 emoji==0.5.4
-beautifulsoup4==4.9.1
+beautifulsoup4==4.9.3
 pathlib==1.0.1
 typing==3.7.4.1
 spamwatch==0.3.0
