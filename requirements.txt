@@ -16,7 +16,7 @@ telegraph==1.4.1
 aiohttp==3.6.2
 pyDownload==0.0.1.dev4
 pillow==7.1.2
-gtts==2.1.1
+gtts==2.1.2
 gitpython
 pafy==0.5.5
 youtube_dl==2020.7.28
