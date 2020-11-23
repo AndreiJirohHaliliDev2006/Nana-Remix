@@ -19,7 +19,7 @@ pillow==7.1.2
 gtts==2.1.1
 gitpython
 pafy==0.5.5
-youtube_dl==2020.7.28
+youtube_dl==2020.11.21.1
 googletrans==3.0.0
 currencyconverter
 heroku3==4.2.1
