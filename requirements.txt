@@ -11,7 +11,7 @@ gitpython
 gpytranslate
 gtts==2.1.1
 htmlement==1.0.0
-httplib2==0.15.0
+httplib2==0.19.0
 mega.py==1.0.8
 nekobin==0.0.2
 pafy==0.5.5
