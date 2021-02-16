@@ -30,7 +30,7 @@ pySmartDL==1.3.3
 pyYAML
 removebg==0.4
 reportlab
-requests==2.24.0
+requests==2.25.1
 simplejson
 spamwatch==0.3.0
 speedtest-cli
