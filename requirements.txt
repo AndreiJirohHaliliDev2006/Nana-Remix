@@ -41,5 +41,5 @@ TgCrypto
 timeago
 tracemoepy
 typing==3.7.4.1
-ujson==4.0.1
+ujson==4.0.2
 uptime
