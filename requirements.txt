@@ -2,7 +2,7 @@ aiofiles
 aiohttp==3.7.3
 beautifulsoup4==4.9.1
 bs4==0.0.1
-coffeehouse==2.2.2
+coffeehouse==2.2.4
 currencyconverter
 emoji==0.5.4
 git+https://github.com/pokurt/rextester_py@nana
