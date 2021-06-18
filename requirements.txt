@@ -9,7 +9,7 @@ git+https://github.com/pokurt/rextester_py@nana
 git+https://github.com/ytdl-org/youtube-dl
 gitpython
 gpytranslate
-gtts==2.1.1
+gtts==2.2.3
 htmlement==1.0.0
 httplib2==0.15.0
 mega.py==1.0.8
